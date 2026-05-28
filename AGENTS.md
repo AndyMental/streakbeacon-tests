@@ -4,20 +4,20 @@ This repository is for black-box StreakBeacon test automation against a deployed
 
 ## Stack Signals
 
-Current repo-root inspection shows no stack files yet:
+Current repo-root inspection shows a Playwright/TypeScript test stack:
 
-- No `package.json`
-- No Playwright config
-- No Python, Java, Ruby, or other build manifest
-- No existing test directory or feature files
+- `package.json`
+- `playwright.config.ts`
+- `features/`
+- `tests/`
 
-Treat this as an unbootstrapped test repository until those files exist. Re-detect the stack from the repo root before adding or running automation.
+Re-detect the stack from the repo root before adding or running automation.
 
 ## Required Input
 
 Tests must run only against a deployed Vercel URL for StreakBeacon.
 
-Gap: this repository does not yet define a canonical environment variable, config file, or CLI flag for that URL. Until the test harness defines one, get the deployed Vercel URL from the issue metadata or release handoff and document exactly how it was supplied in the result comment.
+Use `STREAKBEACON_BASE_URL` for the deployed Vercel URL. Get the deployed Vercel URL from the issue metadata or release handoff and document exactly how it was supplied in the result comment.
 
 Do not run tests against localhost or by importing the application source.
 
@@ -26,23 +26,38 @@ Do not run tests against localhost or by importing the application source.
 - Do not inspect, import, mock, or depend on files from `streakbeacon-app`.
 - Do not reach into Vercel internals, database state, or private application APIs unless the public product workflow uses them.
 - Exercise the deployed site the way a user would: browser navigation, visible UI, public network behavior, and documented user credentials or test accounts.
-- Keep test data and credentials out of the repository. Use the platform-approved secret mechanism when one is documented.
+- Keep test data and credentials out of the repository. Supply seeded credentials with `STREAKBEACON_TEST_EMAIL` and `STREAKBEACON_TEST_PASSWORD` until a platform-approved secret mechanism is documented.
 
 ## Repo-Local Commands
 
-No install, test, lint, format, browser setup, or Playwright run commands are present yet because the repository has no stack manifest or scripts.
+Install dependencies:
 
-When a stack is added, update this section with the exact repo-local commands from the committed files. Do not guess commands from memory or from the application repository.
+```bash
+npm install
+```
 
-Current gaps to resolve during test harness setup:
+Install Playwright browsers:
 
-- Install command: missing
-- Test command: missing
+```bash
+npm run install:browsers
+```
+
+Run the smoke test:
+
+```bash
+STREAKBEACON_BASE_URL=<deployed-vercel-url> STREAKBEACON_TEST_EMAIL=<seeded-email> STREAKBEACON_TEST_PASSWORD=<seeded-password> npm run test:smoke
+```
+
+Run all tests:
+
+```bash
+npm test
+```
+
+Current gaps to resolve during future test harness setup:
+
 - Lint command: missing
 - Format command: missing
-- Browser setup command: missing
-- Playwright run command: missing
-- Deployed URL variable/config name: missing
 
 ## Gherkin Gate
 
@@ -74,4 +89,3 @@ If commands are missing, report the gap plainly instead of substituting a differ
 - Do not push directly to a default branch.
 - Keep changes limited to this test repository unless the issue explicitly assigns cross-repo coordination.
 - Pull requests should state the deployed URL requirement and list checks run or skipped with reasons.
-
