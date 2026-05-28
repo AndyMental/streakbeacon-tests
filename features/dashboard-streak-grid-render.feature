@@ -8,5 +8,5 @@ Feature: Streak grid renders a habit's recent history
     Given a logged-in seeded user has a habit named "Read"
     And the habit has 7 contiguous marked days ending today
     When the user opens the dashboard
-    Then the end of the habit's streak-grid row shows 7 filled #27AE60 green cells
+    Then the end of the habit's streak-grid row shows 7 completed days
     And the dashboard shows current streak count "7" for the habit

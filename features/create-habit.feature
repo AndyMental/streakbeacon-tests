@@ -6,5 +6,5 @@ Feature: Create a habit from the StreakBeacon home page
   @smoke @home
   Scenario: User adds a first habit and sees it in the list with a zero streak
     Given the user is on the StreakBeacon home page with no habits
-    When the user enters a habit name and submits the new-habit form
+    When the user submits a new habit named "Read"
     Then the habits list shows the new habit with a streak count of 0
