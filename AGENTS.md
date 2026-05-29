@@ -36,11 +36,18 @@ Install dependencies:
 npm install
 ```
 
-Install Playwright browsers:
+Install Playwright browsers and required system dependencies:
 
 ```bash
 npm run install:browsers
 ```
+
+This runs `playwright install --with-deps`, which installs the Playwright
+browser binaries plus the Linux system packages they need (fonts, audio,
+graphics libraries). On Debian/Ubuntu hosts this step requires sudo or root
+because `--with-deps` invokes `apt-get`; on hosts without apt (or without
+root) install the browsers without system deps via `npx playwright install`
+and install the system packages out-of-band, then re-run tests.
 
 Run the smoke test:
 
