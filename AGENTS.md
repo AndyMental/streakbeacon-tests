@@ -19,14 +19,16 @@ Tests must run only against a deployed Vercel URL for StreakBeacon.
 
 Use `STREAKBEACON_BASE_URL` for the deployed Vercel URL. Get the deployed Vercel URL from the issue metadata or release handoff and document exactly how it was supplied in the result comment.
 
+`STREAKBEACON_BASE_URL` is the only required environment variable for black-box automation. StreakBeacon is a local-first app with no authentication surface (per AND-5634/AND-5288), so no seeded account credentials are needed. Browser-local state (e.g. `localStorage`, `IndexedDB`) is the persistence layer; tests must establish required state through the public UI rather than via seeded server-side accounts.
+
 Do not run tests against localhost or by importing the application source.
 
 ## Black-Box Constraints
 
 - Do not inspect, import, mock, or depend on files from `streakbeacon-app`.
 - Do not reach into Vercel internals, database state, or private application APIs unless the public product workflow uses them.
-- Exercise the deployed site the way a user would: browser navigation, visible UI, public network behavior, and documented user credentials or test accounts.
-- Keep test data and credentials out of the repository. Supply seeded credentials with `STREAKBEACON_TEST_EMAIL` and `STREAKBEACON_TEST_PASSWORD` until a platform-approved secret mechanism is documented.
+- Exercise the deployed site the way a user would: browser navigation, visible UI, and public network behavior.
+- Do not commit test data, fixtures, or any future credentials to the repository. If a future feature introduces an authenticated surface, add a platform-approved secret mechanism before re-introducing credential env vars; do not reintroduce `STREAKBEACON_TEST_EMAIL` / `STREAKBEACON_TEST_PASSWORD` without updating this guide and the matrix in lockstep.
 
 ## Repo-Local Commands
 
@@ -45,7 +47,7 @@ npm run install:browsers
 Run the smoke test:
 
 ```bash
-STREAKBEACON_BASE_URL=<deployed-vercel-url> STREAKBEACON_TEST_EMAIL=<seeded-email> STREAKBEACON_TEST_PASSWORD=<seeded-password> npm run test:smoke
+STREAKBEACON_BASE_URL=<deployed-vercel-url> npm run test:smoke
 ```
 
 Run all tests:
