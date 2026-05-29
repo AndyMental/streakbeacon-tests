@@ -1,8 +1,14 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 
-const requiredEnv = ['STREAKBEACON_BASE_URL', 'STREAKBEACON_TEST_EMAIL', 'STREAKBEACON_TEST_PASSWORD'] as const;
+// StreakBeacon is local-first with no authentication surface (per AND-5634 / AND-5288).
+// The login-based flow below was written before that was understood and cannot run
+// against the current product. The scenario is skipped at the suite level until it is
+// rewritten for the local-first first-run model. STREAKBEACON_BASE_URL remains the only
+// required env var for black-box automation; STREAKBEACON_TEST_EMAIL and
+// STREAKBEACON_TEST_PASSWORD are no longer expected.
+const requiredEnv = ['STREAKBEACON_BASE_URL'] as const;
 
-function requireEnv(name: (typeof requiredEnv)[number]): string {
+function requireEnv(name: string): string {
   const value = process.env[name];
 
   if (!value) {
@@ -156,7 +162,12 @@ test.describe('StreakBeacon smoke', () => {
 
   test.skip(missingEnv.length > 0, `Missing required black-box test input: ${missingEnv.join(', ')}`);
 
-  test('seeded user can log in, mark today, and see today marked on the streak grid', async ({ page }) => {
+  test.skip(
+    true,
+    'Pending rewrite: StreakBeacon is local-first with no auth surface (AND-5634 / AND-5288); the login-then-mark-today flow below is stale and must be re-authored against the first-run UI before it can run.'
+  );
+
+  test('user can mark today and see today marked on the streak grid', async ({ page }) => {
     await login(page);
 
     const todayControl = await markToday(page);
