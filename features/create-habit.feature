@@ -1,10 +1,18 @@
-Feature: Create a habit from the StreakBeacon home page
-  As a new StreakBeacon user with no habits yet
-  I want to add my first habit by name
-  So that I can start tracking a streak from day zero
+Feature: Dashboard habit creation
+  As a local-first StreakBeacon user
+  I want to create habits from the dashboard
+  So that I can start tracking streaks without account setup
 
-  @smoke @home
-  Scenario: User adds a first habit and sees it in the list with a zero streak
-    Given the user is on the StreakBeacon home page with no habits
-    When the user submits a new habit named "Read"
-    Then the habits list shows the new habit with a streak count of 0
+  @smoke @critical @dashboard
+  Scenario: First-run dashboard shows an empty state
+    Given the local StreakBeacon store contains no habits
+    When the user opens the StreakBeacon dashboard
+    Then the dashboard shows an empty habits message
+    And the dashboard offers an Add habit control
+
+  @smoke @critical @dashboard
+  Scenario: User adds a first habit and sees a zero streak
+    Given the user is on the StreakBeacon dashboard with no habits
+    When the user submits "Read" through the Habit name field and Add habit control
+    Then the habits list shows a habit named "Read"
+    And the habit row for "Read" shows a current streak count of 0
