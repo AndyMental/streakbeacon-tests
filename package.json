@@ -7,7 +7,7 @@
     "test": "playwright test",
     "test:smoke": "playwright test tests/smoke/login-mark-today.spec.ts",
     "test:headed": "playwright test --headed",
-    "install:browsers": "playwright install"
+    "install:browsers": "playwright install --with-deps"
   },
   "devDependencies": {
     "@playwright/test": "^1.52.0",
