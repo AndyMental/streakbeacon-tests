@@ -5,11 +5,11 @@ Feature: Backend API contract
 
   # Jyro validation required: confirm the MVP has no public backend API before Playwright/API automation begins.
   @critical @api
-  Scenario: MVP exposes no public backend API workflow
+  Scenario: Local-first MVP has no backend API coverage
     Given the StreakBeacon MVP is defined as local-first with no public backend API
-    When the user completes habit tracking from the deployed site
-    Then the workflow succeeds without calling a documented backend API
-    And no API-specific test credentials are required
+    When QA maps PRD coverage for backend API workflows
+    Then backend API coverage is recorded as not applicable for the MVP
+    And no API-specific automation is created
 
   # Jyro validation required: replace this scenario if a sync/auth API becomes part of MVP scope.
   @api

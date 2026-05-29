@@ -5,7 +5,7 @@ Feature: Not found page
 
   @smoke @critical
   Scenario: Visitor opens an unknown route
-    Given the visitor is not signed in
+    Given the visitor has no required account session
     When the visitor opens an unknown StreakBeacon route
     Then the page shows a branded not found message
     And the page offers a link back to the home page
