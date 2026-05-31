@@ -25,7 +25,7 @@ Backend API coverage is not applicable for the local-first MVP unless a future P
 | Theme persistence | `features/settings-panel.feature` - User changes the theme and keeps it after reload |
 | Export JSON | `features/settings-panel.feature` - User exports tracked data as JSON |
 | Import valid JSON | `features/settings-panel.feature` - User previews a valid JSON import; User confirms a valid JSON import |
-| Import invalid JSON rejection | `features/settings-panel.feature` - User sees invalid JSON import rejected |
+| Import invalid or incomplete JSON rejection | `features/settings-panel.feature` - User sees invalid JSON import rejected; User sees incomplete JSON import rejected |
 | Reset all data confirm | `features/settings-panel.feature` - User resets all local data after confirmation |
 | Reset all data cancel | `features/settings-panel.feature` - User cancels reset all local data |
 | Persistence after reload | `features/local-persistence.feature` - User sees saved habits after reload |
