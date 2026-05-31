@@ -39,6 +39,13 @@ Feature: Settings panel
     And the current habits remain unchanged
 
   @critical @settings
+  Scenario: User sees incomplete JSON import rejected
+    Given the user is on the StreakBeacon settings panel with tracked habit data
+    When the user chooses a JSON backup file missing required StreakBeacon data
+    Then the settings panel shows an import error
+    And the current habits remain unchanged
+
+  @critical @settings
   Scenario: User resets all local data after confirmation
     Given the user is on the StreakBeacon settings panel with tracked habit data
     When the user confirms the Reset all data dialog
