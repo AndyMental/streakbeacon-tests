@@ -1,0 +1,103 @@
+openapi: 3.0.3
+info:
+  title: StreakBeacon Streak API
+  description: Public API contract for StreakBeacon streak management.
+  version: 1.0.0
+servers:
+  - url: /api
+paths:
+  /api/streaks:
+    get:
+      summary: List streaks
+      operationId: listStreaks
+      responses:
+        '200':
+          description: Streaks returned
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Streak'
+    post:
+      summary: Create a streak
+      operationId: createStreak
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateStreakRequest'
+      responses:
+        '201':
+          description: Streak created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Streak'
+        '400':
+          description: Name is required
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Streak already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /api/streaks/{id}:
+    delete:
+      summary: Delete a streak
+      operationId: deleteStreak
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Streak deleted
+        '404':
+          description: Streak not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    CreateStreakRequest:
+      type: object
+      required:
+        - name
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          minLength: 1
+    Streak:
+      type: object
+      required:
+        - id
+        - name
+      additionalProperties: true
+      properties:
+        id:
+          type: string
+          minLength: 1
+        name:
+          type: string
+          minLength: 1
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      additionalProperties: true
+      properties:
+        error:
+          type: string
+          minLength: 1
+        code:
+          type: string
