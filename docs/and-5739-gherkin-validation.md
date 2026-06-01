@@ -21,7 +21,12 @@ Backend API coverage is not applicable for the local-first MVP unless a future P
 | Multi-day unmark              | `features/streak-grid-interactions.feature` - User unmarks multiple completed days from the grid                        |
 | Streak grid summary           | `features/dashboard-streak-grid-render.feature` - Habit with 7 contiguous marked days shows a filled recent-history row |
 | Current/best streak summary   | `features/dashboard-streak-grid-render.feature` - Habit summary separates current and best streaks                      |
-| Weekly overview               | `features/weekly-overview.feature` - User sees this week's completion overview                                          |
+| Weekly overview               | `features/weekly-overview.feature` - User sees a 7-day weekly overview for an active habit                              |
+| Weekly overview               | `features/weekly-overview.feature` - User sees open days in the weekly overview                                         |
+| Weekly overview               | `features/weekly-overview.feature` - User sees only active habits in the weekly overview                                |
+| Weekly overview               | `features/weekly-overview.feature` - User sees the current week after today's completion changes                        |
+| Weekly overview               | `features/weekly-overview.feature` - Screen reader user hears each weekly overview cell status                          |
+| Weekly overview               | `features/weekly-overview.feature` - User sees no weekly overview when no active habits exist                           |
 | Theme persistence             | `features/settings-panel.feature` - User changes the theme and keeps it after reload                                    |
 | Export JSON                   | `features/settings-panel.feature` - User exports tracked data as JSON                                                   |
 | Import valid JSON             | `features/settings-panel.feature` - User previews a valid JSON import; User confirms a valid JSON import                |
