@@ -11,6 +11,21 @@ Feature: Streak grid interactions
     Then the dashboard shows yesterday as the selected day
     And the selected-day action is available for "Read"
 
+  @critical @a11y @dashboard
+  Scenario: Keyboard user selects a previous day in the streak grid
+    Given the local StreakBeacon store contains a habit named "Read"
+    And yesterday's grid cell for "Read" is open
+    When the user tabs to yesterday's grid cell and presses Enter
+    Then the dashboard shows yesterday as the selected day
+    And the focused grid cell remains announced as open
+
+  @a11y @dashboard
+  Scenario: User reviews a grid day tooltip
+    Given the local StreakBeacon store contains a habit named "Read"
+    And yesterday's grid cell for "Read" is completed
+    When the user hovers over yesterday's grid cell for "Read"
+    Then a tooltip identifies yesterday's date and completed status
+
   @critical @dashboard
   Scenario: User marks a selected day complete from the grid
     Given the local StreakBeacon store contains a habit named "Read"
