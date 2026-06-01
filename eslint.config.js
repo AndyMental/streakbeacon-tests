@@ -24,7 +24,24 @@ export default tseslint.config(
     ...playwright.configs['flat/recommended'],
     rules: {
       ...playwright.configs['flat/recommended'].rules,
-      'playwright/expect-expect': ['warn', { assertFunctionNames: ['expect', 'expectTodayMarked'] }],
+      'playwright/expect-expect': [
+        'warn',
+        {
+          assertFunctionNames: [
+            'expect',
+            'expectCurrentStreak',
+            'expectDarkThemeSelected',
+            'expectEmptyState',
+            'expectGridCellCompleted',
+            'expectGridCellOpen',
+            'expectHabitVisible',
+            'expectLoaded',
+            'expectSelectedDay',
+            'expectToastOrStatus',
+            'expectTodayMarked'
+          ]
+        }
+      ],
       'playwright/no-skipped-test': 'off'
     }
   },
