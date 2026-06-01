@@ -32,6 +32,7 @@ Feature: App shell resilience
     Given the deployed StreakBeacon app is loaded
     When the user presses Tab once
     Then the skip link to main content has keyboard focus
+    And the skip link is visible while focused
 
   @critical @a11y
   Scenario: Keyboard user activates the skip link
