@@ -69,9 +69,9 @@ async function login(page: Page): Promise<void> {
   await page.goto('/');
 
   const signInLink = await firstVisible(
-    page.getByRole('link', { name: /log in|login|sign in|signin/i }).or(
-      page.getByRole('button', { name: /log in|login|sign in|signin/i })
-    )
+    page
+      .getByRole('link', { name: /log in|login|sign in|signin/i })
+      .or(page.getByRole('button', { name: /log in|login|sign in|signin/i }))
   );
 
   if (signInLink) {
@@ -134,7 +134,10 @@ async function markToday(page: Page): Promise<Locator> {
     page.getByRole('checkbox', { name: /today|complete|done|check in/i })
   ]);
 
-  return page.getByRole('button', { name: /today/i }).or(page.getByRole('checkbox', { name: /today/i })).first();
+  return page
+    .getByRole('button', { name: /today/i })
+    .or(page.getByRole('checkbox', { name: /today/i }))
+    .first();
 }
 
 async function expectTodayMarked(todayControl: Locator): Promise<void> {
