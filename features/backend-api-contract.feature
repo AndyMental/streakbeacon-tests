@@ -3,18 +3,20 @@ Feature: Backend API contract
   I want the public API surface to match the product contract
   So that backend behavior is either covered or explicitly out of scope
 
-  # Jyro validation required: confirm the MVP has no public backend API before Playwright/API automation begins.
+  # Contract source: AND-6111, based on the API documentation work tracked by AND-6048.
   @critical @api
-  Scenario: Local-first MVP has no backend API coverage
-    Given the StreakBeacon MVP is defined as local-first with no public backend API
-    When QA maps PRD coverage for backend API workflows
-    Then backend API coverage is recorded as not applicable for the MVP
-    And no API-specific automation is created
+  Scenario: Documented streak endpoints have Gherkin coverage
+    Given the approved API scope includes GET "/api/streaks"
+    And the approved API scope includes POST "/api/streaks"
+    And the approved API scope includes DELETE "/api/streaks/:id"
+    When QA maps backend API workflows
+    Then GET "/api/streaks" is covered by the List streaks API feature
+    And POST "/api/streaks" is covered by the Create streak API feature
+    And DELETE "/api/streaks/:id" is covered by the Delete streak API feature
 
-  # Jyro validation required: replace this scenario if a sync/auth API becomes part of MVP scope.
   @api
-  Scenario: API automation waits for a documented public contract
-    Given no public StreakBeacon API contract has been approved
+  Scenario: Undocumented API routes remain out of automation scope
+    Given an API route is not listed in the approved API scope
     When QA prepares backend API automation
-    Then automation remains blocked on a documented API contract
-    And the blocker is reported against AND-5288
+    Then no scenario is automated for that route
+    And the missing contract is reported against AND-5288
