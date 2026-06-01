@@ -7,7 +7,7 @@
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "playwright test",
-    "test:smoke": "playwright test tests/smoke/login-mark-today.spec.ts",
+    "test:smoke": "playwright test tests/smoke",
     "test:headed": "playwright test --headed",
     "install:browsers": "playwright install --with-deps"
   },
