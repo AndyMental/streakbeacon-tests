@@ -17,7 +17,7 @@ Re-detect the stack from the repo root before adding or running automation.
 
 Tests must run only against a deployed Vercel URL for StreakBeacon.
 
-Use `STREAKBEACON_BASE_URL` for the deployed Vercel URL. Get the deployed Vercel URL from the issue metadata or release handoff and document exactly how it was supplied in the result comment.
+Use `STREAKBEACON_BASE_URL` for the deployed Vercel URL. CI systems that already expose `BASE_URL` or `DEPLOY_URL` may use those aliases instead. Get the deployed Vercel URL from the issue metadata or release handoff and document exactly how it was supplied in the result comment.
 
 Do not run tests against localhost or by importing the application source.
 
@@ -71,6 +71,25 @@ Format repository files:
 
 ```bash
 npm run format
+```
+
+Check formatting without writing files:
+
+```bash
+npm run format:check
+```
+
+List Playwright tests against a deploy URL without executing them:
+
+```bash
+STREAKBEACON_BASE_URL=<deployed-vercel-url> npm run test:list
+```
+
+Equivalent CI URL aliases are supported:
+
+```bash
+BASE_URL=<deployed-vercel-url> npm run test:list
+DEPLOY_URL=<deployed-vercel-url> npm run test:smoke
 ```
 
 ## Gherkin Gate

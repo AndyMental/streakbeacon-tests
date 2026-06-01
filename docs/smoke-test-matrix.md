@@ -6,13 +6,30 @@ deployed site and seeded credentials; do not import or inspect app source.
 
 ## Required Inputs
 
-| Input                        | Source                                             | Required for              | Notes                                         |
-| ---------------------------- | -------------------------------------------------- | ------------------------- | --------------------------------------------- |
-| `STREAKBEACON_BASE_URL`      | Issue metadata key `deploy_url` or release handoff | Every Playwright run      | Must be a deployed Vercel URL, not localhost. |
-| `STREAKBEACON_TEST_EMAIL`    | Approved seeded test account secret                | Authenticated smoke flows | Do not commit the value.                      |
-| `STREAKBEACON_TEST_PASSWORD` | Approved seeded test account secret                | Authenticated smoke flows | Do not commit the value.                      |
+| Input                        | Source                                             | Required for              | Notes                                                                   |
+| ---------------------------- | -------------------------------------------------- | ------------------------- | ----------------------------------------------------------------------- |
+| `STREAKBEACON_BASE_URL`      | Issue metadata key `deploy_url` or release handoff | Every Playwright run      | Must be a deployed Vercel URL, not localhost.                           |
+| `BASE_URL`                   | CI deploy-preview environment                      | Every Playwright run      | Alias accepted when `STREAKBEACON_BASE_URL` is not set.                 |
+| `DEPLOY_URL`                 | CI deploy-preview environment                      | Every Playwright run      | Alias accepted when `STREAKBEACON_BASE_URL` and `BASE_URL` are not set. |
+| `STREAKBEACON_TEST_EMAIL`    | Approved seeded test account secret                | Authenticated smoke flows | Do not commit the value.                                                |
+| `STREAKBEACON_TEST_PASSWORD` | Approved seeded test account secret                | Authenticated smoke flows | Do not commit the value.                                                |
 
-## Command
+## CI Command Matrix
+
+| Stage                       | Command                                                                                                                                              | Required environment                                       | Expected result                                         |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------- |
+| Install Node dependencies   | `npm install`                                                                                                                                        | None                                                       | Installs the committed npm dependency graph.            |
+| Install Playwright browsers | `npm run install:browsers`                                                                                                                           | Host supports Playwright browser/system dependency install | Installs Chromium and required runtime packages.        |
+| Lint and type check         | `npm run lint`                                                                                                                                       | None                                                       | Runs `tsc --noEmit` and ESLint with no errors.          |
+| Check formatting            | `npm run format:check`                                                                                                                               | None                                                       | Reports all tracked files as Prettier formatted.        |
+| List deploy-targeted tests  | `STREAKBEACON_BASE_URL=<deployed-vercel-url> npm run test:list`                                                                                      | `STREAKBEACON_BASE_URL`, `BASE_URL`, or `DEPLOY_URL`       | Lists Playwright tests without executing browser flows. |
+| Smoke deployed preview      | `STREAKBEACON_BASE_URL=<deployed-vercel-url> STREAKBEACON_TEST_EMAIL=<seeded-email> STREAKBEACON_TEST_PASSWORD=<seeded-password> npm run test:smoke` | Deploy URL plus seeded credentials                         | Executes the authenticated Chromium smoke test.         |
+
+CI systems may inject `BASE_URL` or `DEPLOY_URL` instead of
+`STREAKBEACON_BASE_URL`; the Playwright config resolves the first available
+value in that order.
+
+## Smoke Command
 
 ```bash
 STREAKBEACON_BASE_URL=<deployed-vercel-url> \

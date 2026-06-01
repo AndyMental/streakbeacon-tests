@@ -1,8 +1,11 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 
-const requiredEnv = ['STREAKBEACON_BASE_URL', 'STREAKBEACON_TEST_EMAIL', 'STREAKBEACON_TEST_PASSWORD'] as const;
+const baseUrlEnv = ['STREAKBEACON_BASE_URL', 'BASE_URL', 'DEPLOY_URL'] as const;
+const credentialEnv = ['STREAKBEACON_TEST_EMAIL', 'STREAKBEACON_TEST_PASSWORD'] as const;
 
-function requireEnv(name: (typeof requiredEnv)[number]): string {
+type RequiredEnv = (typeof baseUrlEnv)[number] | (typeof credentialEnv)[number];
+
+function requireEnv(name: RequiredEnv): string {
   const value = process.env[name];
 
   if (!value) {
@@ -10,6 +13,10 @@ function requireEnv(name: (typeof requiredEnv)[number]): string {
   }
 
   return value;
+}
+
+function hasBaseUrl(): boolean {
+  return baseUrlEnv.some((name) => Boolean(process.env[name]));
 }
 
 function todayLabels(): string[] {
@@ -155,7 +162,10 @@ async function expectTodayMarked(todayControl: Locator): Promise<void> {
 }
 
 test.describe('StreakBeacon smoke', () => {
-  const missingEnv = requiredEnv.filter((name) => !process.env[name]);
+  const missingEnv = [
+    ...(hasBaseUrl() ? [] : ['STREAKBEACON_BASE_URL, BASE_URL, or DEPLOY_URL']),
+    ...credentialEnv.filter((name) => !process.env[name])
+  ];
 
   test.skip(missingEnv.length > 0, `Missing required black-box test input: ${missingEnv.join(', ')}`);
 
