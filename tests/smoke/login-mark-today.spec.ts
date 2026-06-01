@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 
-const requiredEnv = ['STREAKBEACON_BASE_URL', 'STREAKBEACON_TEST_EMAIL', 'STREAKBEACON_TEST_PASSWORD'] as const;
+const baseUrlEnv = ['STREAKBEACON_BASE_URL', 'DEPLOY_URL', 'BASE_URL'] as const;
+const requiredEnv = ['STREAKBEACON_TEST_EMAIL', 'STREAKBEACON_TEST_PASSWORD'] as const;
 
 function requireEnv(name: (typeof requiredEnv)[number]): string {
   const value = process.env[name];
@@ -156,8 +157,10 @@ async function expectTodayMarked(todayControl: Locator): Promise<void> {
 
 test.describe('StreakBeacon smoke', () => {
   const missingEnv = requiredEnv.filter((name) => !process.env[name]);
+  const hasBaseUrl = baseUrlEnv.some((name) => process.env[name]);
 
   test.skip(missingEnv.length > 0, `Missing required black-box test input: ${missingEnv.join(', ')}`);
+  test.skip(!hasBaseUrl, `Missing required black-box test input: one of ${baseUrlEnv.join(', ')}`);
 
   test('seeded user can log in, mark today, and see today marked on the streak grid', async ({ page }) => {
     await login(page);
