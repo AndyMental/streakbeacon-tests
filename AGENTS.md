@@ -73,6 +73,26 @@ Format repository files:
 npm run format
 ```
 
+## CI Command Matrix
+
+The following matrix defines the standard commands for CI/CD integration. All commands expect the environment to be prepared via `npm install`.
+
+| Phase | Command | Prerequisite | Notes |
+| :--- | :--- | :--- | :--- |
+| **Install** | `npm install` | Node.js, `package.json` | Baseline for all subsequent steps. |
+| **Lint** | `npm run lint` | Install complete | Verifies code style and common patterns. |
+| **Format** | `npm run format` | Install complete | Enforces Prettier formatting across the repo. |
+| **Test (Smoke)** | `npm run test:smoke` | `STREAKBEACON_BASE_URL` | Runs the high-priority smoke suite against a deployed URL. |
+| **Test (All)** | `npm test` | `STREAKBEACON_BASE_URL` | Runs the full Playwright suite. |
+
+### CI Environment Variables
+
+For Playwright execution, ensure the following are injected into the CI environment:
+
+- `STREAKBEACON_BASE_URL`: The target Vercel deployment URL.
+- `STREAKBEACON_TEST_EMAIL`: Seeded test account email.
+- `STREAKBEACON_TEST_PASSWORD`: Seeded test account password.
+
 ## Gherkin Gate
 
 Before implementing or changing automation, validate that each scenario has clear Gherkin coverage:
