@@ -61,10 +61,17 @@ Run all tests:
 npm test
 ```
 
-Current gaps to resolve during future test harness setup:
+Run lint:
 
-- Lint command: missing
-- Format command: missing
+```bash
+npm run lint
+```
+
+Format repository files:
+
+```bash
+npm run format
+```
 
 ## Gherkin Gate
 
