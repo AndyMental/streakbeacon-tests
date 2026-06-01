@@ -1,6 +1,7 @@
 import { expect, type Locator, type Page, test } from '@playwright/test';
 
 const requiredEnv = ['STREAKBEACON_BASE_URL', 'STREAKBEACON_TEST_EMAIL', 'STREAKBEACON_TEST_PASSWORD'] as const;
+const fixedClockTime = new Date('2026-06-01T12:00:00Z');
 
 function requireEnv(name: (typeof requiredEnv)[number]): string {
   const value = process.env[name];
@@ -12,8 +13,7 @@ function requireEnv(name: (typeof requiredEnv)[number]): string {
   return value;
 }
 
-function todayLabels(): string[] {
-  const now = new Date();
+function todayLabels(now = fixedClockTime): string[] {
   const isoDate = now.toISOString().slice(0, 10);
   const weekday = new Intl.DateTimeFormat('en-US', { weekday: 'long', timeZone: 'UTC' }).format(now);
   const monthDay = new Intl.DateTimeFormat('en-US', {
@@ -160,6 +160,9 @@ test.describe('StreakBeacon smoke', () => {
   test.skip(missingEnv.length > 0, `Missing required black-box test input: ${missingEnv.join(', ')}`);
 
   test('seeded user can log in, mark today, and see today marked on the streak grid', async ({ page }) => {
+    await page.clock.setFixedTime(fixedClockTime);
+    expect(todayLabels()).toEqual(['2026-06-01', 'today', 'Today', 'Monday', 'June 1']);
+
     await login(page);
 
     const todayControl = await markToday(page);
