@@ -26,10 +26,7 @@ runtime.
 ## Current command shape
 
 ```bash
-STREAKBEACON_BASE_URL=<deployed-vercel-url> \
-STREAKBEACON_TEST_EMAIL=<seeded-email> \
-STREAKBEACON_TEST_PASSWORD=<seeded-password> \
-npm run test:smoke
+STREAKBEACON_BASE_URL=<deployed-vercel-url> npm run test:smoke
 ```
 
 ## Pending URL injection alignment
@@ -37,8 +34,8 @@ npm run test:smoke
 AND-6044 requests `DEPLOY_URL` support for deploy URL injection. Until that
 change lands, the current suite requires `STREAKBEACON_BASE_URL`. If `DEPLOY_URL`
 is added as an alias, GitHub Actions should map the Vercel deploy URL into the
-alias and preserve the three-value contract above:
+alias and preserve the deployed URL plus any authenticated-flow credentials:
 
 - deployed URL
-- seeded test email
-- seeded test password
+- seeded test email, only for authenticated specs
+- seeded test password, only for authenticated specs

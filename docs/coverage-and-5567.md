@@ -3,7 +3,7 @@
 Black-box coverage prep so the two PRD surfaces can be validated as soon as a
 stable Vercel deployment URL is supplied. All Playwright specs added by this
 card are gated on `STREAKBEACON_BASE_URL` and skip cleanly when it is absent,
-matching the pattern already used by `tests/smoke/login-mark-today.spec.ts`.
+matching the pattern used by the smoke specs.
 
 ## Goalpost trace
 
@@ -90,7 +90,7 @@ expose at least one of these — flagged in this comment as the QA dependency:
 ## Gating + execution
 
 - All new specs follow the existing `test.skip(missingEnv.length > 0, ...)`
-  pattern from `tests/smoke/login-mark-today.spec.ts`. When the deploy URL is
+  pattern from the smoke specs. When the deploy URL is
   absent the specs are reported as skipped, not failed, so CI stays green
   pre-deploy.
 - The 404 spec only requires `STREAKBEACON_BASE_URL` (no credentials — the page

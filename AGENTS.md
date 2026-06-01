@@ -26,7 +26,7 @@ Do not run tests against localhost or by importing the application source.
 - Do not inspect, import, mock, or depend on files from `streakbeacon-app`.
 - Do not reach into Vercel internals, database state, or private application APIs unless the public product workflow uses them.
 - Exercise the deployed site the way a user would: browser navigation, visible UI, public network behavior, and documented user credentials or test accounts.
-- Keep test data and credentials out of the repository. Supply seeded credentials with `STREAKBEACON_TEST_EMAIL` and `STREAKBEACON_TEST_PASSWORD` until a platform-approved secret mechanism is documented.
+- Keep test data and credentials out of the repository. No-auth local-first smoke flows require only `STREAKBEACON_BASE_URL`. Supply seeded credentials with `STREAKBEACON_TEST_EMAIL` and `STREAKBEACON_TEST_PASSWORD` only for authenticated flows.
 
 ## Repo-Local Commands
 
@@ -52,7 +52,7 @@ and install the system packages out-of-band, then re-run tests.
 Run the smoke test:
 
 ```bash
-STREAKBEACON_BASE_URL=<deployed-vercel-url> STREAKBEACON_TEST_EMAIL=<seeded-email> STREAKBEACON_TEST_PASSWORD=<seeded-password> npm run test:smoke
+STREAKBEACON_BASE_URL=<deployed-vercel-url> npm run test:smoke
 ```
 
 Run all tests:

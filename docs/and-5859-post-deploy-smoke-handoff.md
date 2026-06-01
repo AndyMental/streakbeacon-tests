@@ -4,7 +4,8 @@ This handoff prepares AND-5288 deploy-time Playwright smoke execution from the
 current black-box Gherkin coverage in `streakbeacon-tests`. It does not inspect
 or depend on `streakbeacon-app` source. Browser execution remains blocked until
 a deployed Vercel URL is supplied as `STREAKBEACON_BASE_URL` or issue metadata
-key `deploy_url`, with any required seeded credentials supplied out of band.
+key `deploy_url`, with seeded credentials supplied out of band only for
+authenticated flows.
 
 ## Deploy-Independent Gherkin Inventory
 
@@ -31,16 +32,16 @@ Current inventory total: 37 scenarios, with 8 tagged `@smoke`.
 Run this set first after `deploy_url` is available. It covers the smallest
 release-blocking surface from AND-5288 without requiring app-source imports.
 
-| Order | Scenario                                                              | Source                                          | Existing automation                                                                                             | Required inputs                                                                                             | Pass signal                                                              |
-| ----: | --------------------------------------------------------------------- | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------ |
-|     1 | Visitor opens an unknown route                                        | `features/not-found-page.feature`               | `tests/not-found-page.spec.ts`                                                                                  | `STREAKBEACON_BASE_URL`                                                                                     | Branded not-found copy appears with a home link.                         |
-|     2 | Visitor returns home from the not found page                          | `features/not-found-page.feature`               | `tests/not-found-page.spec.ts`                                                                                  | `STREAKBEACON_BASE_URL`                                                                                     | Home page is visible after using the recovery link.                      |
-|     3 | Keyboard user skips directly to main content                          | `features/app-shell-resilience.feature`         | `tests/app-shell-resilience.spec.ts`                                                                            | `STREAKBEACON_BASE_URL`                                                                                     | First Tab focuses the skip link.                                         |
-|     4 | Keyboard user activates the skip link                                 | `features/app-shell-resilience.feature`         | `tests/app-shell-resilience.spec.ts`                                                                            | `STREAKBEACON_BASE_URL`                                                                                     | Focus moves to `main` and URL hash matches the skip target.              |
-|     5 | User adds a first habit and sees a zero streak                        | `features/create-habit.feature`                 | Pending                                                                                                         | `STREAKBEACON_BASE_URL`; clean local store strategy                                                         | Habit named `Read` appears with current streak `0`.                      |
-|     6 | User marks today's habit complete                                     | `features/today-streak-completion.feature`      | `tests/smoke/login-mark-today.spec.ts` covers the older seeded-login path and needs local-first state alignment | `STREAKBEACON_BASE_URL`; deterministic habit named `Read`; fixed date or date-insensitive selector strategy | Today's grid cell for `Read` is completed and current streak is `1`.     |
-|     7 | User sees saved habits after reload                                   | `features/local-persistence.feature`            | Pending                                                                                                         | Same browser context as habit creation/completion                                                           | `Read` and today's completed cell persist after reload.                  |
-|     8 | Habit with 7 contiguous marked days shows a filled recent-history row | `features/dashboard-streak-grid-render.feature` | Pending                                                                                                         | Deterministic seven-day local data setup                                                                    | Seven completed recent-history cells and current streak `7` are visible. |
+| Order | Scenario                                                              | Source                                          | Existing automation                  | Required inputs                                                                        | Pass signal                                                                     |
+| ----: | --------------------------------------------------------------------- | ----------------------------------------------- | ------------------------------------ | -------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+|     1 | Visitor opens an unknown route                                        | `features/not-found-page.feature`               | `tests/not-found-page.spec.ts`       | `STREAKBEACON_BASE_URL`                                                                | Branded not-found copy appears with a home link.                                |
+|     2 | Visitor returns home from the not found page                          | `features/not-found-page.feature`               | `tests/not-found-page.spec.ts`       | `STREAKBEACON_BASE_URL`                                                                | Home page is visible after using the recovery link.                             |
+|     3 | Keyboard user skips directly to main content                          | `features/app-shell-resilience.feature`         | `tests/app-shell-resilience.spec.ts` | `STREAKBEACON_BASE_URL`                                                                | First Tab focuses the skip link.                                                |
+|     4 | Keyboard user activates the skip link                                 | `features/app-shell-resilience.feature`         | `tests/app-shell-resilience.spec.ts` | `STREAKBEACON_BASE_URL`                                                                | Focus moves to `main` and URL hash matches the skip target.                     |
+|     5 | User adds a first habit and sees a zero streak                        | `features/create-habit.feature`                 | Pending                              | `STREAKBEACON_BASE_URL`; clean local store strategy                                    | Habit named `Read` appears with current streak `0`.                             |
+|     6 | User marks today's habit complete                                     | `features/today-streak-completion.feature`      | `tests/smoke/mark-today.spec.ts`     | `STREAKBEACON_BASE_URL`; clean browser-local storage; habit created through visible UI | Today's grid cell for the created habit is completed and current streak is `1`. |
+|     7 | User sees saved habits after reload                                   | `features/local-persistence.feature`            | Pending                              | Same browser context as habit creation/completion                                      | `Read` and today's completed cell persist after reload.                         |
+|     8 | Habit with 7 contiguous marked days shows a filled recent-history row | `features/dashboard-streak-grid-render.feature` | Pending                              | Deterministic seven-day local data setup                                               | Seven completed recent-history cells and current streak `7` are visible.        |
 
 Do not expand beyond this set until the smoke run produces a stable deployed
 baseline. Settings, edit/delete, weekly overview, visual baselines, delayed
@@ -111,15 +112,9 @@ The minimum command shape is:
 STREAKBEACON_BASE_URL=<deployed-vercel-url> npm test
 ```
 
-For the current seeded-login smoke scaffold, include credentials only when the
-approved deployed flow still requires them:
-
-```bash
-STREAKBEACON_BASE_URL=<deployed-vercel-url> \
-STREAKBEACON_TEST_EMAIL=<seeded-email> \
-STREAKBEACON_TEST_PASSWORD=<seeded-password> \
-npm run test:smoke
-```
+The mark-today smoke is no-auth local-first and needs only `STREAKBEACON_BASE_URL`.
+Include credentials only for separate authenticated specs that still require a
+seeded account.
 
 If no `deploy_url` exists, report the run as blocked on
 `STREAKBEACON_BASE_URL` and do not substitute localhost.
